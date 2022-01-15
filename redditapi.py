@@ -1,24 +1,29 @@
+from tracemalloc import start
 import requests
 import pandas as pd
 from datetime import datetime
 
+startDate = 1577836800
+endDate = 1609459199
+subredditList = []
+
 def df_from_response(res):
     df = pd.DataFrame()
 
-    for post in res.json()['data']['children']:
-        df = df.append({
-            'subreddit': post['data']['subreddit'],
-            'title': post['data']['title'],
-            'selftext': post['data']['selftext'],
-            'upvote_ratio': post['data']['upvote_ratio'],
-            'ups': post['data']['ups'],
-            'downs': post['data']['downs'],
-            'score': post['data']['score'],
-            'link_flair_css_class': post['data']['link_flair_css_class'],
-            'created_utc': datetime.fromtimestamp(post['data']['created_utc']).strftime('%Y-%m-%dT%H:%M:%SZ'),
-            'id': post['data']['id'],
-            'kind': post['kind']
-        }, ignore_index=True)
+    for post in res.json()['data']:
+        if post['url'] != post['full_link'] and post['created_utc'] <= endDate:
+            df = df.append({
+                'subreddit': post['subreddit'],
+                'title': post['title'],
+                'selftext': post['selftext'],
+                'upvote_ratio': post['upvote_ratio'],
+                'score': post['score'],
+                'created_utc': post['created_utc'],
+                'id': post['id'],
+                'full_link': post['full_link'],
+                'url': post['url'],
+                'url_overridden_by_dest': post['url_overridden_by_dest']
+            }, ignore_index=True)
 
     return df
 
@@ -38,17 +43,15 @@ headers = {**headers, **{'Authorization': TOKEN}}
 
 
 data = pd.DataFrame()
-params = {'limit': 100}
+params = {'size': 500}
 
-for i in range(3):
-    res = requests.get("https://oauth.reddit.com/r/demsocialist/new",
-                       headers=headers,
-                       params=params)
-
-
-    new_df = df_from_response(res)
-    row = new_df.iloc[len(new_df)-1]
-    fullname = row['kind'] + '_' + row['id']
-    params['after'] = fullname
+for sub in subredditList:
+    params['subreddit'] = sub
+    params['after'] = startDate
+    while params['after'] <= endDate:
+        res = requests.get('https://api.pushshift.io/reddit/search/submission/', params=params)
+        new_df = df_from_response(res)
+        row = new_df.iloc[len(new_df)-1]
+        params['after'] = row['created_utc']
     
     data = data.append(new_df, ignore_index=True)
