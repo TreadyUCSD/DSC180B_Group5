@@ -2,6 +2,8 @@ from tracemalloc import start
 import requests
 import pandas as pd
 from datetime import datetime
+import json
+import os
 
 startDate = 1577836800
 endDate = 1609459199
@@ -46,12 +48,38 @@ data = pd.DataFrame()
 params = {'size': 500}
 
 for sub in subredditList:
-    params['subreddit'] = sub
-    params['after'] = startDate
-    while params['after'] <= endDate:
-        res = requests.get('https://api.pushshift.io/reddit/search/submission/', params=params)
-        new_df = df_from_response(res)
-        row = new_df.iloc[len(new_df)-1]
-        params['after'] = row['created_utc']
-    
-    data = data.append(new_df, ignore_index=True)
+    filename = str(sub) + '_posts.jsonl'
+    with open(filename, 'w') as f:
+        params['subreddit'] = sub
+        params['after'] = startDate
+        while params['after'] <= endDate:
+            res = requests.get('https://api.pushshift.io/reddit/search/submission/', params=params)
+            new_df = df_from_response(res)
+            row = new_df.iloc[len(new_df)-1]
+            params['after'] = row['created_utc']
+            data = data.append(new_df, ignore_index=True)
+            length = data.shape[0]
+            if length >= 100000:
+                data_json = data.to_json(orient="records")
+                parsed = json.loads(data_json)
+                lines = json.dumps(parsed)
+                for line in lines:
+                    f.write(line)
+                    f.write('\n')
+                f.flush()
+                os.fsync(f.fileno())
+                data = pd.DataFrame()
+        data_json = data.to_json(orient="records")
+        parsed = json.loads(data_json)
+        lines = json.dumps(parsed)
+        for line in lines:
+            f.write(line)
+            f.write('\n')
+        f.flush()
+        os.fsync(f.fileno())
+        data = pd.DataFrame()
+                
+
+
+
+
