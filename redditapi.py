@@ -46,6 +46,10 @@ headers = {**headers, **{'Authorization': TOKEN}}
 
 data = pd.DataFrame()
 params = {'size': 500}
+os.chdir('..')
+cur_dir = os.getcwd()
+os.chdir(cur_dir + '/data')
+
 
 for sub in subredditList:
     filename = str(sub) + '_posts.jsonl'
