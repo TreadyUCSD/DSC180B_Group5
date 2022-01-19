@@ -18,7 +18,7 @@ def df_from_response(res, endDate = 1609459199):
                 'subreddit': post['subreddit'],
                 'title': post['title'],
                 'selftext': post['selftext'],
-                'upvote_ratio': post['upvote_ratio'],
+                #'upvote_ratio': post['upvote_ratio'],
                 'score': post['score'],
                 'created_utc': post['created_utc'],
                 'id': post['id'],
