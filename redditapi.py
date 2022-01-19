@@ -18,14 +18,18 @@ def df_from_response(res, endDate = 1609459199):
                 'subreddit': post['subreddit'],
                 'title': post['title'],
                 'selftext': post['selftext'],
-                #'upvote_ratio': post['upvote_ratio'],
                 'score': post['score'],
                 'created_utc': post['created_utc'],
                 'id': post['id'],
                 'full_link': post['full_link'],
                 'url': post['url'],
-                #'url_overridden_by_dest': post['url_overridden_by_dest']
+                'upvote_ratio': 'NA',
+                'url_overridden_by_dest': 'NA'
             }, ignore_index=True)
+            if 'upvote_ratio' in post.keys():
+                df.iat[len(df)-1, 8] = post['upvote_ratio']
+            if 'url_overridden_by_dest' in post.keys():
+                df.iat[len(df)-1, 9] = post['url_overridden_by_dest']
 
     return df
 
