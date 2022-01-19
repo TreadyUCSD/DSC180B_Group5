@@ -35,19 +35,19 @@ def main(targets):
     endDate = 1609459199
     subredditList = targets
 
-    client_auth = requests.auth.HTTPBasicAuth('personal use token', 'secret token')
-    data = {
-        'grant_type': 'password',
-        'username': 'username',
-        'password': 'password'
-    }
+    # client_auth = requests.auth.HTTPBasicAuth('personal use token', 'secret token')
+    # data = {
+    #    'grant_type': 'password',
+    #    'username': 'username',
+    #    'password': 'password'
+    #}
 
-    headers = {'User-Agent': 'myBot/0.0.1'}
-    res = requests.post('https://www.reddit.com/api/v1/access_token',
-                        auth=client_auth, data=data, headers=headers)
+    # headers = {'User-Agent': 'myBot/0.0.1'}
+    # res = requests.post('https://www.reddit.com/api/v1/access_token',
+    #                    auth=client_auth, data=data, headers=headers)
 
-    TOKEN = f"bearer {res.json()['access_token']}"
-    headers = {**headers, **{'Authorization': TOKEN}}
+    # TOKEN = f"bearer {res.json()['access_token']}"
+    # headers = {**headers, **{'Authorization': TOKEN}}
 
 
     data = pd.DataFrame()
