@@ -9,7 +9,7 @@ import sys
 
 
 
-def df_from_response(res):
+def df_from_response(res, endDate = 1609459199):
     df = pd.DataFrame()
 
     for post in res.json()['data']:
