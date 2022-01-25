@@ -77,9 +77,8 @@ def main(targets):
                     if length >= 100000:
                         data_json = data.to_json(orient="records")
                         parsed = json.loads(data_json)
-                        lines = json.dumps(parsed)
-                        for line in lines:
-                            f.write(line)
+                        for line in parsed:
+                            f.write(json.dumps(line))
                             f.write('\n')
                         f.flush()
                         os.fsync(f.fileno())
