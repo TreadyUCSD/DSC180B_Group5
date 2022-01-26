@@ -10,7 +10,7 @@ import sys
 
 
 
-def df_from_response(res, endDate = 1609459199):
+def df_from_response(res, endDate = 1640995199):
     df = pd.DataFrame()
 
     for post in res.json()['data']:
@@ -37,7 +37,7 @@ def df_from_response(res, endDate = 1609459199):
 def main(targets):
 
     startDate = 1577836800
-    endDate = 1609459199
+    endDate = 1640995199
     subredditList = targets
 
     # client_auth = requests.auth.HTTPBasicAuth('personal use token', 'secret token')
