@@ -67,18 +67,18 @@ def main(targets):
         with open(filename, 'w') as f:
             params['subreddit'] = sub
             params['after'] = startDate
+            timeout = 0
             while params['after'] <= endDate:
-                tries = 0
                 try:
                     res = requests.get('https://api.pushshift.io/reddit/search/submission/', params=params)
                     if res.status_code != 200:
+                        tries = 0
                         while res.status_code != 200:
                             time.sleep(5)
                             res = requests.get('https://api.pushshift.io/reddit/search/submission/', params=params)
                             tries += 1
                             if tries >= 5:
                                 raise Exception('Cannot resolve url: ' + res.url)
-                    tries = 0
                     new_df = df_from_response(res)
                     if new_df.shape[0] > 0:
                         row = new_df.iloc[len(new_df)-1]
@@ -96,9 +96,11 @@ def main(targets):
                             data = pd.DataFrame()
                     else: break
                 except:
-                    if tries <= 5:
-                        row = data.iloc[len(data)-1]
-                        params['after'] = int(row['created_utc'])
+                    timeout += 1
+                    if timeout <= 5:
+                        if data.shape[0] > 0:
+                            row = data.iloc[len(data)-1]
+                            params['after'] = int(row['created_utc'])
                         data_json = data.to_json(orient="records")
                         parsed = json.loads(data_json)
                         for line in parsed:
