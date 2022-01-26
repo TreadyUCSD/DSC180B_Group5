@@ -74,7 +74,7 @@ def main(targets):
                     params['after'] = int(row['created_utc'])
                     data = data.append(new_df, ignore_index=True)
                     length = data.shape[0]
-                    if length >= 100000:
+                    if length >= 15000:
                         data_json = data.to_json(orient="records")
                         parsed = json.loads(data_json)
                         for line in parsed:
