@@ -108,7 +108,8 @@ def main(targets):
                         os.fsync(f.fileno())
                         data = pd.DataFrame()
                         time.sleep(25)
-                    else: break
+                    else: 
+                        raise Exception('Cannot resolve url: ' + res.url)
             data_json = data.to_json(orient="records")
             parsed = json.loads(data_json)
             for line in parsed:
