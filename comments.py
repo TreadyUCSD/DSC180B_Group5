@@ -27,6 +27,7 @@ def get_comments(full_link):
 def main(targets):
 
     subredditList = targets
+    chunksize = 200
 
     os.chdir('..')
     cur_dir = os.getcwd()
@@ -35,7 +36,6 @@ def main(targets):
     for subreddit in subredditList:
         filename = str(subreddit) + '_comments.csv'
         sub_file = os.getcwd() + '/' + str(subreddit) + '_posts.jsonl'
-        chunksize = 500
         header = True
         for chunk in pd.read_json(sub_file, lines=True, chunksize=chunksize):
             temp = chunk['full_link'].apply(get_comments)
