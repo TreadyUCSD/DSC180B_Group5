@@ -27,7 +27,7 @@ def get_comments(full_link):
 def main(targets):
 
     subredditList = targets
-    chunksize = 60
+    chunksize = 100
 
     os.chdir('..')
     cur_dir = os.getcwd()
