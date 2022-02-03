@@ -24,7 +24,7 @@ def get_author_name(full_link):
 def main(targets):
     
     subredditList = targets
-    chunksize = 100
+    chunksize = 200
 
     os.chdir('..')
     cur_dir = os.getcwd()
