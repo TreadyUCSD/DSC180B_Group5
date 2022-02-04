@@ -29,9 +29,9 @@ def df_from_response(res, endDate = 1640995199):
                 'url_overridden_by_dest': 'NA'
             }, ignore_index=True)
             if 'upvote_ratio' in post.keys():
-                df.iat[len(df)-1, 8] = post['upvote_ratio']
+                df.iat[len(df)-1, 9] = post['upvote_ratio']
             if 'url_overridden_by_dest' in post.keys():
-                df.iat[len(df)-1, 9] = post['url_overridden_by_dest']
+                df.iat[len(df)-1, 10] = post['url_overridden_by_dest']
 
     return df
 
