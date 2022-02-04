@@ -24,6 +24,7 @@ def df_from_response(res, endDate = 1640995199):
                 'id': post['id'],
                 'full_link': post['full_link'],
                 'url': post['url'],
+                'author': post['author'],
                 'upvote_ratio': 'NA',
                 'url_overridden_by_dest': 'NA'
             }, ignore_index=True)
