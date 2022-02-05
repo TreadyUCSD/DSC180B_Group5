@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 sublist = ['neoprogs', 'moderatepolitics', 'politics', 'uspolitics', 'AmericanPolitics', 'Republican',
             'Liberal', 'Conservative', 'Libertarian', 'Anarchism', 'socialism', 
             'progressive', 'Liberty', 'alltheleft', 'blackflag', 'greenparty', 
-            'democracy', 'LibertarianSocialism', 'capitalism', 'anarchist', 
+            'democracy', 'LibertarianSocialism', 'Capitalism', 'anarchist', 
             'republicans', 'democrats', 'communist', 'socialdemocracy', 
             'AnarchoPacifism', 'conservatives', 'republicanism', 'conspiracy']
 
