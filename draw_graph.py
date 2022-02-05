@@ -89,7 +89,7 @@ def main(targets):
     
     sub_labels = {sub:sub for sub in sublist if sub in G.nodes}
     nx.draw_networkx_labels(G, pos = pos, labels = sub_labels, font_color = 'black', font_size = 7)
-    plt.savefig('graph.png')
+    plt.savefig('graph.svg', format = 'svg', dpi = 300)
 
 
 
