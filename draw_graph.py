@@ -7,7 +7,7 @@ import networkx as nx
 from matplotlib import pyplot as plt
 
 sublist = ['neoprogs', 'moderatepolitics', 'politics', 'uspolitics', 'americanpolitics', 'republican',
-            'Liberal', 'Conservative', 'Libertarian', 'anarchism', 'socialism', 
+            'Liberal', 'Conservative', 'Libertarian', 'Anarchism', 'socialism', 
             'progressive', 'liberty', 'alltheleft', 'blackflag', 'GreenParty', 
             'democracy', 'LibertarianSocialism', 'Capitalism', 'anarchist', 
             'republicans', 'democrats', 'communist', 'socialdemocracy', 
