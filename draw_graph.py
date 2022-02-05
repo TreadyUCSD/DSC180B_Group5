@@ -65,7 +65,7 @@ def main(targets):
         size_ratio = 10
         
 
-    pos =nx.spring_layout(G, k=0.1)
+    pos =nx.spring_layout(G, k=0.3)
 
     node_sizes = [int(math.ceil(post_count[n]/size_ratio)) for n in node_separate['users']]
     node_colors = [0.5714285714285714 for n in node_separate['users']]
