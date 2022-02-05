@@ -37,7 +37,7 @@ def df_from_response(res, endDate = 1640995199):
 
 def main(targets):
 
-    startDate = 1577836800
+    startDate = 1577836800 
     endDate = 1640995199
     subredditList = targets
 
