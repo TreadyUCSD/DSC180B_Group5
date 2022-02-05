@@ -41,7 +41,7 @@ def main(targets):
     node_separate = {'subs': [], 'users' : [], 'colors': []}
     remove = []
     for n in G.nodes:
-        if n.lower() in sublist:
+        if n in sublist:
             node_separate['subs'] += [n]
         else:
             if not ignore_ones:
@@ -71,7 +71,7 @@ def main(targets):
     node_colors = [0.5714285714285714 for n in node_separate['users']]
     s_node_sizes = [100 for n in node_separate['subs']]
     s_node_colors = [0.25 for n in node_separate['subs']]
-    nx.draw_networkx_nodes(G, pos = pos, nodelist = node_separate['users'], node_size = node_sizes, node_color = node_separate['colors'])
+    nx.draw_networkx_nodes(G, pos = pos, nodelist = node_separate['users'], node_size = node_sizes, node_color = node_separate['colors'], edgecolors='black', linewidths=0.5)
     nx.draw_networkx_nodes(G, pos = pos, nodelist = node_separate['subs'], node_size = s_node_sizes, node_color = 'maroon')
 
     edge_colors = {'edges': [], 'colors': []}
@@ -88,7 +88,7 @@ def main(targets):
     nx.draw_networkx_edges(G, pos=pos, edgelist=edge_colors['edges'], edge_color=edge_colors['colors'], arrows=False, width = 0.5)
     
     sub_labels = {sub:sub for sub in sublist if sub in G.nodes}
-    nx.draw_networkx_labels(G, pos = pos, labels = sub_labels, font_color = 'black')
+    nx.draw_networkx_labels(G, pos = pos, labels = sub_labels, font_color = 'black', font_size = 7)
     plt.savefig('graph.png')
 
 
