@@ -10,7 +10,7 @@ sublist = ['neoprogs', 'moderatepolitics', 'politics', 'uspolitics', 'AmericanPo
             'Liberal', 'Conservative', 'Libertarian', 'Anarchism', 'socialism', 
             'progressive', 'Liberty', 'alltheleft', 'blackflag', 'GreenParty', 
             'democracy', 'LibertarianSocialism', 'Capitalism', 'anarchist', 
-            'republicans', 'democrats', 'communist', 'SocialDemocracy', 
+            'republicans', 'democrats', 'Communist', 'SocialDemocracy', 
             'AnarchoPacifism', 'conservatives', 'republicanism', 'conspiracy']
 
 def main(targets):
