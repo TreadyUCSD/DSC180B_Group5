@@ -6,12 +6,12 @@ import math
 import networkx as nx
 from matplotlib import pyplot as plt
 
-sublist = ['neoprogs', 'moderatepolitics', 'politics', 'uspolitics', 'AmericanPolitics', 'Republican',
-            'Liberal', 'Conservative', 'Libertarian', 'Anarchism', 'socialism', 
-            'progressive', 'Liberty', 'alltheleft', 'blackflag', 'greenparty', 
-            'democracy', 'LibertarianSocialism', 'Capitalism', 'anarchist', 
+sublist = ['neoprogs', 'moderatepolitics', 'politics', 'uspolitics', 'americanpolitics', 'republican',
+            'liberal', 'conservative', 'libertarian', 'anarchism', 'socialism', 
+            'progressive', 'liberty', 'alltheleft', 'blackflag', 'greenparty', 
+            'democracy', 'libertariansocialism', 'capitalism', 'anarchist', 
             'republicans', 'democrats', 'communist', 'socialdemocracy', 
-            'AnarchoPacifism', 'conservatives', 'republicanism', 'conspiracy']
+            'anarchopacifism', 'conservatives', 'republicanism', 'conspiracy']
 
 def main(targets):
     file = targets[0]
@@ -33,12 +33,15 @@ def main(targets):
     post_count = {}
     user_colors = {}
     for e in G.edges(data='weight', keys=True):
+        #if e[0] in sublist:
+           # G.remove_edge(e[0], e[1], key = e[2])
+           # G.add_edge(e[0] + '1', e[1], key = e[2], weight = e[3])
         post_count[e[0]] = post_count.get(e[0], 0) + e[3]
         user_colors[e[0]] = max([user_colors.get(e[0], e[2]), e[2]])
     node_separate = {'subs': [], 'users' : [], 'colors': []}
     remove = []
     for n in G.nodes:
-        if n in sublist:
+        if n.lower() in sublist:
             node_separate['subs'] += [n]
         else:
             if not ignore_ones:
