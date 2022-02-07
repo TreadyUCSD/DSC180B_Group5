@@ -30,6 +30,7 @@ def main(targets):
     chunksize = 100
 
     os.chdir('..')
+    os.chdir('..')
     cur_dir = os.getcwd()
     os.chdir(cur_dir + '/data')
 

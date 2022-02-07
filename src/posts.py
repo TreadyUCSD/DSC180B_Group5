@@ -59,6 +59,7 @@ def main(targets):
     data = pd.DataFrame()
     params = {'size': 500}
     os.chdir('..')
+    os.chdir('..')
     cur_dir = os.getcwd()
     os.chdir(cur_dir + '/data')
 

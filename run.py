@@ -13,10 +13,14 @@ from matplotlib import pyplot as plt
 from datetime import datetime
 import time
 import requests
+import src.graph as graph
+import src.draw_graph as draw_graph
 
 
 def main(targets):
     if 'test' in targets:
+        graph.generate_graphs([], test=True)
+        draw_graph.draw('test_graph', size_ratio=1, test=True)
         
         
         
