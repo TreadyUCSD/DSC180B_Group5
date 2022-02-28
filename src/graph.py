@@ -119,11 +119,13 @@ def generate_graphs(subs, test = False):
                 # write misinformation data to csv for the subreddit
                 f.write(subreddit + ',' + str(num_posts) + ',' + str(mis) + '\n')
         # if there is only a misinformation edge for a user, add a fact edge with a weight of 0
+        add_edges = []
         for e in G.edges(keys=True):
             if e[2] == 1:
                 if not G.has_edge(e[0], e[1], key = 0):
-                    G.add_edge(e[0], e[1], 0, weight = 0)
-
+                    add_edges += [(e[0], e[1])]
+        for e in add_edges:
+            G.add_edge(e[0], e[1], 0, weight = 0)
         nx.write_edgelist(G, 'misinformation_graph.edgelist')
 
         
