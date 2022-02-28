@@ -42,8 +42,11 @@ def updateGraph(post, graph):
     # if edge exists, increment weight by one
     if graph.has_edge(auth, sub, key = key):
         graph.edges[auth, sub, key]['weight'] += 1
-    # Add an edge from user to subreddit if it does not exist. with weight 0 and appropriate key (1 for misinfo, otherwise 0)
+    # Add an edge from user to subreddit if it does not exist. with weight 1 and appropriate key (1 for misinfo, otherwise 0)
     else:
+        # if the post is misinfo and there are no edges for non misinfo, add edge with weight 0
+        if key == 1 and not graph.has_edge(auth, sub, key = 0):
+            graph.add_edge(auth, sub, 0, weight = 0)
         graph.add_edge(auth, sub, key, weight = 1)
     return post
 
@@ -118,14 +121,6 @@ def generate_graphs(subs, test = False):
                     posts.apply(updateGraph, axis=1, graph = G)
                 # write misinformation data to csv for the subreddit
                 f.write(subreddit + ',' + str(num_posts) + ',' + str(mis) + '\n')
-        # if there is only a misinformation edge for a user, add a fact edge with a weight of 0
-        add_edges = []
-        for e in G.edges(keys=True):
-            if e[2] == 1:
-                if not G.has_edge(e[0], e[1], key = 0):
-                    add_edges += [(e[0], e[1])]
-        for e in add_edges:
-            G.add_edge(e[0], e[1], 0, weight = 0)
         nx.write_edgelist(G, 'misinformation_graph.edgelist')
 
         
