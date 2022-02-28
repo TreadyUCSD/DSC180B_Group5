@@ -30,16 +30,21 @@ def misinfo_finder(post, links):
 
 # populates a graph with edges based on whether each post contains misinformation
 def updateGraph(post, graph):
+    # add (user) to end of author name if it is the same as the subreddit name
+    auth = post['author']
+    sub = post['subreddit']
+    if auth == sub:
+        auth = auth + '(user)'
     # determine if post is misinformation
     key = 0
     if post['misinfo']:
         key = 1
     # if edge exists, increment weight by one
-    if graph.has_edge(post['author'], post['subreddit'], key = key):
-        graph.edges[post['author'], post['subreddit'], key]['weight'] += 1
+    if graph.has_edge(auth, sub, key = key):
+        graph.edges[auth, sub, key]['weight'] += 1
     # Add an edge from user to subreddit if it does not exist. with weight 0 and appropriate key (1 for misinfo, otherwise 0)
     else:
-        graph.add_edge(post['author'], post['subreddit'], key, weight = 1)
+        graph.add_edge(auth, sub, key, weight = 1)
     return post
 
 # generates a csv and graph containing information on misinformation in posts
@@ -113,6 +118,12 @@ def generate_graphs(subs, test = False):
                     posts.apply(updateGraph, axis=1, graph = G)
                 # write misinformation data to csv for the subreddit
                 f.write(subreddit + ',' + str(num_posts) + ',' + str(mis) + '\n')
+        # if there is only a misinformation edge for a user, add a fact edge with a weight of 0
+        for e in G.edges(keys=True):
+            if e[2] == 1:
+                if not G.has_edge(e[0], e[1], key = 0):
+                    G.add_edge(e[0], e[1], 0, weight = 0)
+
         nx.write_edgelist(G, 'misinformation_graph.edgelist')
 
         
