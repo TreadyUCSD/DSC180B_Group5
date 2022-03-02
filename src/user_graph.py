@@ -19,19 +19,22 @@ def main(targets):
         subs_users[e[1]].add(e[0])
 
     user_graph = nx.Graph()
-    for sub in subs_users:
-        for u1 in subs_users[sub]:
-            for u2 in subs_users[sub]:
-                if u1 == u2:
-                    continue
-                if user_graph.has_edge(u1, u2):
+    users = []
+    for n in subs_graph.nodes:
+        if n not in subs_users:
+            users += [n]
+    for i in range(len(users)):
+        for j in range(i+1, len(users)):
+            count = 0
+            for sub in subs_users:
+                if users[i] in subs_users[sub] and users[j] in subs_users[sub]:
+                    count += 1
+                if count >= 2:
+                    user_graph.add_edge(users[i], users[j])
                     break
-                for sub2 in subs_users:
-                    if sub == sub2:
-                        continue
-                    if u1 in subs_users[sub2] and u2 in subs_users[sub2]:
-                        user_graph.add_edge(u1,u2)
-                        break
+
+            
+
     
     G_k = nx.algorithms.core.k_core(user_graph)
     main_core = max(nx.algorithms.core.core_number(G_k).values())
