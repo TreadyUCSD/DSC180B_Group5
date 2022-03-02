@@ -3,6 +3,7 @@ import sys
 import math
 import networkx as nx
 import json
+import time
 
 
 def main(targets):
@@ -19,29 +20,29 @@ def main(targets):
         subs_users[e[1]].add(e[0])
 
     user_graph = nx.Graph()
-    users = []
+    sub_pairs = []
     for n in subs_graph.nodes:
         if n not in subs_users:
             users += [n]
     print('users list')
-    for i in range(len(users)):
-        for j in range(i+1, len(users)):
-            count = 0
-            for sub in subs_users:
-                if users[i] in subs_users[sub] and users[j] in subs_users[sub]:
-                    count += 1
-                if count >= 2:
-                    user_graph.add_edge(users[i], users[j])
-                    break
-        if i % 1000 == 0:
-            print(str(i) + '/' + str(len(users)))
+    subs = list(subs_users.keys())
+    interactions = 0
+    start = time.time()
+    for s1 in subs:
+        for s2 in subs:
+            ints = sub_pairs[s1].intersection(sub_pairs[s2])
+            interactions += len(ints)
+            sub_pairs += [ints]
+        print(str(time.time() - start) + '      ' + str(interactions))
+
+
 
             
 
     
-    G_k = nx.algorithms.core.k_core(user_graph)
-    main_core = max(nx.algorithms.core.core_number(G_k).values())
-    print(main_core)
+    #G_k = nx.algorithms.core.k_core(user_graph)
+    #main_core = max(nx.algorithms.core.core_number(G_k).values())
+    #print(main_core)
                     
 
 
