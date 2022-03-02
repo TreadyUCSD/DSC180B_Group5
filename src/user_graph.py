@@ -21,10 +21,10 @@ def main(targets):
 
     user_graph = nx.Graph()
     sub_pairs = []
-    for n in subs_graph.nodes:
-        if n not in subs_users:
-            users += [n]
-    print('users list')
+    #for n in subs_graph.nodes:
+    #    if n not in subs_users:
+    #        users += [n]
+    #print('users list')
     subs = list(subs_users.keys())
     interactions = 0
     start = time.time()
