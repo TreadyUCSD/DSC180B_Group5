@@ -23,6 +23,7 @@ def main(targets):
     for n in subs_graph.nodes:
         if n not in subs_users:
             users += [n]
+    print('users list')
     for i in range(len(users)):
         for j in range(i+1, len(users)):
             count = 0
@@ -32,6 +33,7 @@ def main(targets):
                 if count >= 2:
                     user_graph.add_edge(users[i], users[j])
                     break
+        print(str(i) + '/' + str(len(users)))
 
             
 
