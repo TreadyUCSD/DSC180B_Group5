@@ -33,7 +33,8 @@ def main(targets):
                 if count >= 2:
                     user_graph.add_edge(users[i], users[j])
                     break
-        print(str(i) + '/' + str(len(users)))
+        if i % 1000 == 0:
+            print(str(i) + '/' + str(len(users)))
 
             
 
