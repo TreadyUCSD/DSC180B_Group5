@@ -30,7 +30,7 @@ def main(targets):
     start = time.time()
     for s1 in subs:
         for s2 in subs:
-            ints = sub_pairs[s1].intersection(sub_pairs[s2])
+            ints = subs_users[s1].intersection(subs_users[s2])
             interactions += len(ints)
             sub_pairs += [ints]
         print(str(time.time() - start) + '      ' + str(interactions))
