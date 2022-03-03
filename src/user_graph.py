@@ -17,7 +17,7 @@ def main(targets):
         post_count[e[0]] = post_count.get(e[0], 0) + e[3]
     remove = []
     for u in post_count:
-        if post_count[u] < 2:
+        if post_count[u] < 10:
             remove += [u]
     G.remove_nodes_from(remove)
     remove = []
