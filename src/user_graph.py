@@ -20,7 +20,7 @@ def main(targets):
         subs_users[e[1]].add(e[0])
 
     user_graph = nx.Graph()
-    sub_pairs = []
+    user_pairs = set()
     #for n in subs_graph.nodes:
     #    if n not in subs_users:
     #        users += [n]
@@ -30,9 +30,12 @@ def main(targets):
     start = time.time()
     for s1 in subs:
         for s2 in subs:
-            ints = subs_users[s1].intersection(subs_users[s2])
+            ints = list(subs_users[s1].intersection(subs_users[s2]))
             interactions += len(ints)
-            sub_pairs += [ints]
+            for i in range(len(ints)):
+                for j in range(i+1, len(ints)):
+                    user_pairs.add((ints[i], ints[j]))
+
         print(str(time.time() - start) + '      ' + str(interactions))
 
 
