@@ -57,6 +57,7 @@ def main(targets):
     G_k = nx.algorithms.core.k_core(user_graph)
     main_core = max(nx.algorithms.core.core_number(G_k).values())
     print(main_core)
+    nx.write_edgelist(user_graph, 'user_graph.edgelist')
     nx.write_edgelist(G_k, 'k-core.edgelist')
                     
 
