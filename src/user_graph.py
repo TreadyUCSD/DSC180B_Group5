@@ -6,10 +6,6 @@ import json
 
 
 def main(targets):
-    os.chdir('..')
-    os.chdir('..')
-    cur_dir = os.getcwd()
-    os.chdir(cur_dir + '/data')
 
     G = nx.read_edgelist('misinformation_graph.edgelist', create_using = nx.MultiDiGraph) 
     post_count = {}
@@ -61,6 +57,7 @@ def main(targets):
     G_k = nx.algorithms.core.k_core(user_graph)
     main_core = max(nx.algorithms.core.core_number(G_k).values())
     print(main_core)
+    nx.write_edgelist(G_k, 'k-core.edgelist')
                     
 
 
