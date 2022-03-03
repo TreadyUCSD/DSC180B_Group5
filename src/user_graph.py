@@ -3,7 +3,6 @@ import sys
 import math
 import networkx as nx
 import json
-import time
 
 
 def main(targets):
@@ -12,40 +11,56 @@ def main(targets):
     cur_dir = os.getcwd()
     os.chdir(cur_dir + '/data')
 
-    subs_graph = nx.read_edgelist('misinformation_graph.edgelist', create_using = nx.MultiDiGraph) 
+    G = nx.read_edgelist('misinformation_graph.edgelist', create_using = nx.MultiDiGraph) 
+    post_count = {}
+    for e in G.edges(data='weight', keys=True):
+        post_count[e[0]] = post_count.get(e[0], 0) + e[3]
+    remove = []
+    for u in post_count:
+        if post_count[u] < 2:
+            remove += [u]
+    G.remove_nodes_from[remove]
+    remove = []
+    sub_count = {}
+    for e in G.edges:
+        if e[0] not in sub_count:
+            sub_count[e[0]] = []
+        if e[1] not in sub_count[e[0]]:
+            sub_count[e[0]] += [e[1]]
+    for u in sub_count:
+        if len(sub_count[u]) < 2:
+            remove += [u]
+    G.remove_nodes_from[remove]
     subs_users = {}
-    for e in subs_graph.edges:
+    for e in G.edges:
         if e[1] not in subs_users:
             subs_users[e[1]] = set()
         subs_users[e[1]].add(e[0])
 
     user_graph = nx.Graph()
-    user_pairs = set()
-    #for n in subs_graph.nodes:
-    #    if n not in subs_users:
-    #        users += [n]
-    #print('users list')
-    subs = list(subs_users.keys())
-    interactions = 0
-    start = time.time()
-    for s1 in subs:
-        for s2 in subs:
-            ints = list(subs_users[s1].intersection(subs_users[s2]))
-            interactions += len(ints)
-            for i in range(len(ints)):
-                for j in range(i+1, len(ints)):
-                    user_pairs.add((ints[i], ints[j]))
-
-        print(str(time.time() - start) + '      ' + str(interactions))
-
-
+    users = []
+    for n in G.nodes:
+        if n not in subs_users:
+            users += [n]
+    print('users')
+    for i in range(len(users)):
+        for j in range(i+1, len(users)):
+            count = 0
+            for sub in subs_users:
+                if users[i] in subs_users[sub] and users[j] in subs_users[sub]:
+                    count += 1
+                if count >= 2:
+                    user_graph.add_edge(users[i], users[j])
+                    break
+        if i % 1000 == 0:
+            print(str(i) + '/' + str(len(users)))
 
             
 
     
-    #G_k = nx.algorithms.core.k_core(user_graph)
-    #main_core = max(nx.algorithms.core.core_number(G_k).values())
-    #print(main_core)
+    G_k = nx.algorithms.core.k_core(user_graph)
+    main_core = max(nx.algorithms.core.core_number(G_k).values())
+    print(main_core)
                     
 
 
