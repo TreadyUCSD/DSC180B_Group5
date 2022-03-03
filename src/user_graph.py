@@ -19,7 +19,7 @@ def main(targets):
     for u in post_count:
         if post_count[u] < 2:
             remove += [u]
-    G.remove_nodes_from[remove]
+    G.remove_nodes_from(remove)
     remove = []
     sub_count = {}
     for e in G.edges:
@@ -30,7 +30,7 @@ def main(targets):
     for u in sub_count:
         if len(sub_count[u]) < 2:
             remove += [u]
-    G.remove_nodes_from[remove]
+    G.remove_nodes_from(remove)
     subs_users = {}
     for e in G.edges:
         if e[1] not in subs_users:
