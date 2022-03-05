@@ -123,6 +123,9 @@ points_1 = hv.Points(comments_1[['polarity', 'subjectivity']].values, label="Mis
                                                                                                    height=750, 
                                                                                                    alpha=.7)
 plot = points_0*points_1
+plot.opts(title = 'Sentiment Polarity vs. Subjectivity by Information Type', 
+         xlabel = 'Polarity', 
+         ylabel = 'Subjectivity')
 
 # later: add better tooltips, add more average stats in sidebar
 
