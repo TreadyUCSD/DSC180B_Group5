@@ -1,6 +1,22 @@
+import nltk
+from nltk.corpus import stopwords
+nltk.download('stopwords')
+
 class vocab: 
     # vocabulary class with flag words commonly attributed to misinformation
     # modified from https://www.mdpi.com/2078-2489/12/1/4/htm
+    class stop:
+        subredditList = ['alltheleft', 'AmericanPolitics', 'Anarchism', 'Anarchist', 'AnarchoPacifism', 
+            'blackflag',  'Capitalism', 'Communist', 'Conservative', 'conservatives', 
+            'conspiracy', 'democracy','democrats', 'GreenParty', 'Liberal', 'Libertarian',
+            'LibertarianSocialism', 'Liberty', 'moderatepolitics', 'neoprogs', 'politics', 
+            'progressive','republicanism', 'Republican', 'republicans', 'SocialDemocracy',
+            'socialism', 'uspolitics']
+        words = [word.replace("'", "") for word in stopwords.words('english')]
+        words.append('bot')
+        words.append('')
+        words.extend([sub.lower() for sub in subredditList])
+    
     class subj: 
         article = ['article','submission' ,'sub' ,'post']
         title = ['title','headline','header']

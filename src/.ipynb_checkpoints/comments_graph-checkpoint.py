@@ -5,10 +5,13 @@ import os
 import sys
 import numpy as np
 import vaex
+import string
 import re
 from textblob import TextBlob
 import nltk
-nltk.download('punkt')
+from nltk.corpus import stopwords
+from nltk import word_tokenize
+nltk.download('stopwords')
 import datashader as ds
 import holoviews as hv
 from holoviews import opts
@@ -21,15 +24,16 @@ hd.shade.cmap=["lightblue", "darkblue"]
 hv.extension('bokeh')
 import scattertext as st
 
-# TODO: additional buttons, better tooltips for both, remove stopwords
+# TODO: additional buttons, better tooltips for both
 
 # function for cleaning text comments
 def clean_comments(comment):
     # tokenize, remove punctuation and capitalization
-    comment = re.sub(r'[^\w\s]', '', comment)
-    comment = re.sub(r'[^A-Za-z]', ' ', comment)
-    comment = re.sub(r'\s+', ' ', comment)
-    comment = comment.lower()
+    comment = comment.split(' ')
+    comment = [c.lower() for c in comment]
+    comment = [re.sub(r'[^\w\s]', '', c) for c in comment]
+    comment = [c for c in comment if c not in vc.vocab.stop.words]
+    comment = ' '.join(comment)
     return comment
 
 # misinformation finder modified 
