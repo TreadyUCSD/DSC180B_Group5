@@ -11,7 +11,7 @@ from textblob import TextBlob
 import nltk
 from nltk.corpus import stopwords
 from nltk import word_tokenize
-nltk.download('stopwords')
+# nltk.download('stopwords')
 import datashader as ds
 import holoviews as hv
 from holoviews import opts
@@ -23,8 +23,7 @@ from bokeh.models import HoverTool
 hd.shade.cmap=["lightblue", "darkblue"]
 hv.extension('bokeh')
 import scattertext as st
-
-# TODO: additional buttons, better tooltips for both
+import vocab as vc
 
 # function for cleaning text comments
 def clean_comments(comment):
@@ -59,11 +58,11 @@ def misinfo_finder(post, links):
 
 
 def make_plots():
-    sublist = ['alltheleft', 'AmericanPolitics', 'Anarchism', 'Anarchist', 'AnarchoPacifism', 
-                'blackflag',  'Capitalism', 'Communist', 'Conservative', 'conservatives', 
-                'conspiracy', 'democracy','democrats', 'GreenParty', 'Liberal', 'Libertarian',
+    sublist = ['alltheleft', 'AmericanPolitics', 'Anarchism', 'anarchist', 'AnarchoPacifism', 
+                'blackflag',  'capitalism', 'Communist', 'Conservative', 'conservatives', 
+                'conspiracy', 'democracy','democrats', 'greenparty', 'Liberal', 'Libertarian',
                 'LibertarianSocialism', 'Liberty', 'moderatepolitics', 'neoprogs', 'politics', 
-                'progressive','republicanism', 'Republican', 'republicans', 'SocialDemocracy',
+                'progressive','republicanism', 'Republican', 'republicans', 'socialdemocracy',
                 'socialism', 'uspolitics']
 
     # save links, move to data dir
@@ -162,9 +161,6 @@ def make_plots():
     out = pd.DataFrame({'True Information': top_15_true, 'Misinformation': top_15_mis})
     # out = out.style.set_caption("Top 15 Associated Words/Phrases")
     out.to_csv('comments_misinfo_words.csv', index=False)
-
-    # create plot, save
-    # later: subreddits in tooltips, search bar
 
     html = st.produce_scattertext_explorer(corpus, 
                                            category='misinfo', 
@@ -273,8 +269,6 @@ def make_plots_test():
                                            not_category_name='true_info', 
                                            width_in_pixels=1000, 
                                            metadata=corpus.get_df()['subreddit'])
-    
-    # later: subreddits in tooltips, search bar
 
     open("test_comments_graph_2.html", 'wb').write(html.encode('utf-8'))
     
@@ -283,13 +277,16 @@ def make_plots_test():
 
 
 def main(targets):
-    if targets == 'test':
+    if targets:
         make_plots_test()
     else:
         make_plots()
 
 if __name__ == '__main__':
-    targets = sys.argv[1]
+    if len(sys.argv) > 1:
+        targets = True
+    else:
+        targets = False
     main(targets)
 
 ########### Unused CountVectorizer + MultinomialNB Pipeline
