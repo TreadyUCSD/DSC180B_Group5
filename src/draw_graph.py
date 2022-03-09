@@ -30,7 +30,13 @@ def draw(file, cutoff = 0, size_ratio = 2, test = False):
     # create dictionaries to store number of posts per user and color per user 
     post_count = {}
     user_colors = {}
+    deleted = {'mis': 0, 'fact': 0}
     for e in G.edges(data='weight', keys=True):
+        if e[0] == '[deleted]':
+            if e[2] == 1:
+                deleted['mis'] += e[3]
+            else:
+                deleted['fact'] += e[3]
         #if e[0] in sublist:
            # G.remove_edge(e[0], e[1], key = e[2])
            # G.add_edge(e[0] + '1', e[1], key = e[2], weight = e[3])
@@ -59,6 +65,8 @@ def draw(file, cutoff = 0, size_ratio = 2, test = False):
                     node_separate['colors'] += ['#3D59AB']
             else:
                 remove += [n]
+    remove += ['[deleted]']
+    print(deleted)
 
     #remove nodes from graph
     if len(remove) > 0:
