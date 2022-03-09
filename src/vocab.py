@@ -15,6 +15,8 @@ class vocab:
         words = [word.replace("'", "") for word in stopwords.words('english')]
         words.append('bot')
         words.append('')
+        words.append('sub')
+        words.append('subreddit')
         words.extend([sub.lower() for sub in subredditList])
     
     class subj: 

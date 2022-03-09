@@ -82,9 +82,9 @@ def make_plots():
         comment_files = vaex.from_csv(csv, convert=True, copy_index=False)
     comments = vaex.open_many(csv_list_hdf5)
 
-    posts = vaex.from_json(jsonl_list[0], orient='records', lines=True, copy_index=False)
+    posts = vaex.from_json(jsonl_list[0], orient='records', lines=True, copy_index=False).sample(frac=.1)
     for jsonl in jsonl_list[1:]:
-        posts = posts.concat(vaex.from_json(jsonl, orient='records', lines=True, copy_index=False))
+        posts = posts.concat(vaex.from_json(jsonl, orient='records', lines=True, copy_index=False).sample(frac=.1))
 
     # get comments, combine, merge with posts on full_link
     comments['comment'] = comments.comment.apply(clean_comments)
