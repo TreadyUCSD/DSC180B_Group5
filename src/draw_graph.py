@@ -53,6 +53,8 @@ def draw(file, cutoff = 0, size_ratio = 2, test = False):
         if n in sublist:
             node_separate['subs'] += [n]
         else:
+            if n == '[deleted]':
+                remove += [n]
             # add user to users list if it meets the cutoff, otherwise add them to list to remove
             if post_count[n] > cutoff:
                 node_separate['users'] += [n]
@@ -65,7 +67,7 @@ def draw(file, cutoff = 0, size_ratio = 2, test = False):
                     node_separate['colors'] += ['#3D59AB']
             else:
                 remove += [n]
-    remove += ['[deleted]']
+    
     print(deleted)
 
     #remove nodes from graph
