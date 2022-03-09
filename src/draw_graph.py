@@ -55,6 +55,7 @@ def draw(file, cutoff = 0, size_ratio = 2, test = False):
         else:
             if n == '[deleted]':
                 remove += [n]
+                continue
             # add user to users list if it meets the cutoff, otherwise add them to list to remove
             if post_count[n] > cutoff:
                 node_separate['users'] += [n]
