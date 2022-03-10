@@ -59,7 +59,7 @@ def misinfo_finder(post, links):
 
 def make_plots():
     sublist = ['alltheleft', 'AmericanPolitics', 'Anarchism', 'anarchist', 'AnarchoPacifism', 
-                'blackflag',  'capitalism', 'Communist', 'Conservative', 'conservatives', 
+                'blackflag',  'capitalism', 'communist', 'Conservative', 'conservatives', 
                 'conspiracy', 'democracy','democrats', 'greenparty', 'Liberal', 'Libertarian',
                 'LibertarianSocialism', 'Liberty', 'moderatepolitics', 'neoprogs', 'politics', 
                 'progressive','republicanism', 'Republican', 'republicans', 'socialdemocracy',
@@ -81,10 +81,13 @@ def make_plots():
     for csv in csv_list:
         comment_files = vaex.from_csv(csv, convert=True, copy_index=False)
     comments = vaex.open_many(csv_list_hdf5)
+    print('comments gathered')
 
     posts = vaex.from_json(jsonl_list[0], orient='records', lines=True, copy_index=False).sample(frac=.1)
     for jsonl in jsonl_list[1:]:
         posts = posts.concat(vaex.from_json(jsonl, orient='records', lines=True, copy_index=False).sample(frac=.1))
+        print(jsonl + ' done')
+    print(len(posts) + ' posts')
 
     # get comments, combine, merge with posts on full_link
     comments['comment'] = comments.comment.apply(clean_comments)
@@ -93,6 +96,7 @@ def make_plots():
     temp = temp.apply(misinfo_finder, links=links, axis=1)
     posts = vaex.from_pandas(temp)
     df = posts.join(comments, how='right', on='full_link')
+    print('merge done')
 
     # sentiment polarity (1 = positive, -1 = negative)
     # sentiment subjectivity (1 = subjective, 0 = objective)
@@ -133,6 +137,8 @@ def make_plots():
 
     plot = (points_0 * points_1) << yhist << xhist
     plot.opts(opts.Histogram(alpha=0.3))
+    
+    print('first plot done')
 
     # move to src, save interactive graph
     os.chdir('..')
@@ -166,7 +172,7 @@ def make_plots():
                                            category='misinfo', 
                                            category_name='misinfo', 
                                            not_category_name='true_info', 
-                                           width_in_pixels=1000, 
+                                           width_in_pixels=1200, 
                                            metadata=corpus.get_df()['subreddit'])
 
     open("comments_graph_2.html", 'wb').write(html.encode('utf-8'))

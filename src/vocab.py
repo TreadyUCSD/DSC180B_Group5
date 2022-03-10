@@ -13,10 +13,7 @@ class vocab:
             'progressive','republicanism', 'Republican', 'republicans', 'SocialDemocracy',
             'socialism', 'uspolitics']
         words = [word.replace("'", "") for word in stopwords.words('english')]
-        words.append('bot')
-        words.append('')
-        words.append('sub')
-        words.append('subreddit')
+        words.extend(['bot', '', 'sub', 'subreddit', 'report', 'inc', 'automatically', 'submission', 'rpoliticalvideo'])
         words.extend([sub.lower() for sub in subredditList])
     
     class subj: 
