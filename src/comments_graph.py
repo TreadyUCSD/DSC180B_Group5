@@ -81,20 +81,21 @@ def make_plots():
     for csv in csv_list:
         comment_files = vaex.from_csv(csv, convert=True, copy_index=False)
     comments = vaex.open_many(csv_list_hdf5)
-    print('comments gathered')
 
     posts = vaex.from_json(jsonl_list[0], orient='records', lines=True, copy_index=False).sample(frac=.1)
     for jsonl in jsonl_list[1:]:
         posts = posts.concat(vaex.from_json(jsonl, orient='records', lines=True, copy_index=False).sample(frac=.1))
-        print(jsonl + ' done')
-    print(len(posts) + ' posts')
+    print(str(len(posts)) + ' posts')
 
     # get comments, combine, merge with posts on full_link
     comments['comment'] = comments.comment.apply(clean_comments)
 
     temp = posts.to_pandas_df(column_names=['subreddit', 'full_link', 'url', 'url_overridden_by_dest', 'author'])
+    print('to pandas done')
     temp = temp.apply(misinfo_finder, links=links, axis=1)
+    print('applied misinfo finder')
     posts = vaex.from_pandas(temp)
+    print('converted to vaex')
     df = posts.join(comments, how='right', on='full_link')
     print('merge done')
 
@@ -102,49 +103,52 @@ def make_plots():
     # sentiment subjectivity (1 = subjective, 0 = objective)
     df['polarity'] = df.comment.apply(lambda x: TextBlob(x).sentiment.polarity)
     df['subjectivity'] = df.comment.apply(lambda x: TextBlob(x).sentiment.subjectivity)
-
+    
     comments_0 = df[df.misinfo == 'true_info']
     comments_1 = df[df.misinfo == 'misinfo']
-
-    # first plot: polarity and subjectivity by type of information
-    points_0 = hv.Points(comments_0.to_pandas_df(), 
-                         kdims=['polarity', 'subjectivity'], 
-                         vdims=['subreddit', 'misinfo'], 
-                         label="True Information").opts(colorbar=True, 
-                                                        tools=["hover"], 
-                                                        width=750, 
-                                                        height=750, 
-                                                        alpha=.4, 
-                                                        title = 'Sentiment Polarity vs. Subjectivity by Information Type', 
-                                                        xlabel = 'Polarity', 
-                                                        ylabel = 'Subjectivity')
-
-    points_1 = hv.Points(comments_1.to_pandas_df(), 
-                         kdims=['polarity', 'subjectivity'], 
-                         vdims=['subreddit', 'misinfo'], 
-                         label="Misinformation").opts(colorbar=True, 
-                                                        tools=["hover"], 
-                                                        width=750, 
-                                                        height=750, 
-                                                        alpha=.7, 
-                                                        title = 'Sentiment Polarity vs. Subjectivity by Information Type', 
-                                                        xlabel = 'Polarity', 
-                                                        ylabel = 'Subjectivity')
-
-    xhist, yhist = (histogram(points_0, dimension=dim, normed=True) *
-                    histogram(points_1, dimension=dim, normed=True) 
-                    for dim in ['polarity', 'subjectivity'])
-
-    plot = (points_0 * points_1) << yhist << xhist
-    plot.opts(opts.Histogram(alpha=0.3))
     
-    print('first plot done')
+    print('split done')
+
+#     # first plot: polarity and subjectivity by type of information
+#     points_0 = hv.Points(comments_0.to_pandas_df(), 
+#                          kdims=['polarity', 'subjectivity'], 
+#                          vdims=['subreddit', 'misinfo'], 
+#                          label="True Information").opts(colorbar=True, 
+#                                                         tools=["hover"], 
+#                                                         width=750, 
+#                                                         height=750, 
+#                                                         alpha=.4, 
+#                                                         title = 'Sentiment Polarity vs. Subjectivity by Information Type', 
+#                                                         xlabel = 'Polarity', 
+#                                                         ylabel = 'Subjectivity')
+#     print('points_0 done')
+
+#     points_1 = hv.Points(comments_1.to_pandas_df(), 
+#                          kdims=['polarity', 'subjectivity'], 
+#                          vdims=['subreddit', 'misinfo'], 
+#                          label="Misinformation").opts(colorbar=True, 
+#                                                         tools=["hover"], 
+#                                                         width=750, 
+#                                                         height=750, 
+#                                                         alpha=.7, 
+#                                                         title = 'Sentiment Polarity vs. Subjectivity by Information Type', 
+#                                                         xlabel = 'Polarity', 
+#                                                         ylabel = 'Subjectivity')
+
+#     xhist, yhist = (histogram(points_0, dimension=dim, normed=True) *
+#                     histogram(points_1, dimension=dim, normed=True) 
+#                     for dim in ['polarity', 'subjectivity'])
+
+#     plot = (points_0 * points_1) << yhist << xhist
+#     plot.opts(opts.Histogram(alpha=0.3))
+    
+#     print('first plot done')
 
     # move to src, save interactive graph
     os.chdir('..')
     cur_dir = os.getcwd()
-    os.chdir(cur_dir + 'DSC180B_Group5/src')
-    hv.save(plot, 'comments_graph_1.html')
+    os.chdir(cur_dir + '/DSC180B_Group5/src')
+#     hv.save(plot, 'comments_graph_1.html')
 
     # second plot: scatter text
     # create corpus
@@ -153,6 +157,7 @@ def make_plots():
                                  category_col='misinfo', 
                                  text_col='comment', 
                                  nlp=nlp).build()
+    print('corpus created')
 
     # grab stats and save in csv file
     # misinfo = False
@@ -167,6 +172,8 @@ def make_plots():
     out = pd.DataFrame({'True Information': top_15_true, 'Misinformation': top_15_mis})
     # out = out.style.set_caption("Top 15 Associated Words/Phrases")
     out.to_csv('comments_misinfo_words.csv', index=False)
+    
+    print('csv done')
 
     html = st.produce_scattertext_explorer(corpus, 
                                            category='misinfo', 
@@ -174,6 +181,7 @@ def make_plots():
                                            not_category_name='true_info', 
                                            width_in_pixels=1200, 
                                            metadata=corpus.get_df()['subreddit'])
+    print('second plot done')
 
     open("comments_graph_2.html", 'wb').write(html.encode('utf-8'))
     
@@ -278,10 +286,6 @@ def make_plots_test():
 
     open("test_comments_graph_2.html", 'wb').write(html.encode('utf-8'))
     
-
-    # third plot with flag words from vocab class? histogram?
-
-
 def main(targets):
     if targets:
         make_plots_test()
